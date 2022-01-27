@@ -1,0 +1,62 @@
+/*-*- js-indent-level: 2; css-indent-offset: 2 -*-*/
+html, body {
+  width: 400px;
+  font-family: sans;
+  padding: 0;
+  margin: 0;
+}
+* {
+  box-sizing: border-box;
+}
+.button {
+  margin: 1px;
+  padding: 4px;
+  text-align: left;
+  cursor: pointer;
+}
+.button {
+  background: #eee;
+}
+.button:hover {
+  background: #ccc;
+}
+textarea {
+  width: 100%;
+  height: 10rem;
+}
+#out {
+  width: 100%;
+}
+#out .win {
+  font-size: 0;
+  padding: 1px 3px 3px 2px;
+}
+#out .win:nth-child(odd) { background: #ccc; }
+#out .win:nth-child(even) { background: #aaa; }
+#out .win.closed { background: #f88; }
+#out .tab:hover {
+  background: #fff;
+  border-color: #444;
+}
+#out .tab {
+  padding: .35em .25em;
+  padding-left: .66em;
+  margin-left: 2px;
+  margin-top: 3px;
+  margin-right: -10px;
+  box-sizing: margin-box;
+  display: inline-block;
+  border: 1px solid #000;
+  background: #eee;
+  max-width: calc(20% + 6px);
+  font-size: 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: 3px;
+  border-top-left-radius: 35px 100px;
+  border-top-right-radius: 35px 100px;
+  /*text-overflow: ellipsis;*/
+}
+
+/*[eof]*/

@@ -1,0 +1,63 @@
+-*- org -*-
+
+archive = tag metadata as 'no longer open tab'
+unarchive = restore a tab (and set metadata to 'open tab' state)
+
+* ESSENTIAL
+** TODO Unarchive tab
+** TODO Handle when tab is restored by browser
+   When a recently closed tab is restored by the browser (for example because
+   the user pressed Ctrl-Shift-T), this should be handled gracefully. Ie the
+   newly restored tab should be matched to its corresponding tabHistory, and
+   that tabHistory should be unarchived, and given the tabId of the newly
+   restored tab.
+** TODO Handle when 'Back'/'Forward' used in browser
+   How to do this? Can we use the 'lastAccessed' property of the 'tabs' object
+   to determine whether a tab has been seen before?
+
+   Injecting a 'popstate' listener using 'browser.tabs.executeScript' might
+   work? Also note that we should be able to identify larger user jumps (that
+   is, when user skips further back (or forward) than just the previous (or
+   next) page.
+
+   browser.tabs.executeScript({
+     code: `
+       let tabId = ${tabId}
+       window.onpopstate = function (event) {
+         console.log('HISTORY LOCATION: BAAACK!! ' + tabId + ' ' + window.location.href, event)
+         //browser.storage.local.set({ '_': 'HISTORY LOCATION: ' + window.location.href })
+       }
+     `
+   })
+** TODO Increase browser.storage quota
+* NON-ESSENTIAL
+** TODO Handle tab groups
+   One should be able to name tab groups, and give them a color. In the GUI
+   each tab should have the corresponding color.
+** TODO Move tabs around in popup
+   Tab should be draggable in GUI, and, when moved, should move the tabs in the
+   corresponding way in the browser. When dragging a tab from archive into an
+   existing window, it should be unarchived and instantiated in that window
+   (when just clicking, it should be instantiated in the current window).
+* FINISHED
+** DONE Cryptographically strong randomness in IDs
+   CLOSED: [2022-01-27 Thu 17:33]
+   Session IDs, note IDs etc. should all use cryptographic strength randomness
+   to avoid collisions (since we don't want to do collision detection).
+
+   Will use 22 base64 encoded characters, giving 132 bit entropy. This should be
+   more than enough. 128 bits gives 0.000,000,000,000,000,001% risk of collision
+   if there are 26 billion notes (according to table on Wikipedia) -- that
+   sounds like a pretty acceptable number -- but we might as well round the
+   number off upwards to the nearest base64 number that can be expressed without
+   padding. This gets us 22 characters = 132 bit entropy.
+
+   Well use `window.crypto` (or `window.msCrypto`) and fall back on
+   `Math.random()` (the only non-stoneage browser to use `Math.random()` will be
+   MSIE10, and possibly Safari on Android -- and the latter *might* actually
+   have a cryptographically strong `Math.random()`!).
+
+   As long as the number of clients with bad randomness are kept low it'll
+   prolly not be a problem (is my guess).
+
+* [eof]
