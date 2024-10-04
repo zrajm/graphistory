@@ -18,6 +18,10 @@ const $ = (() => {
 
 /******************************************************************************/
 
+function prettyDate(epoch) {
+  return (new Date(epoch)).toISOString().replace(/T/, ' ').replace(/:[^:]*$/, '')
+}
+
 // Goto specified tab (focus window if necessary).
 function tabSwitch(tabId) {
   browser.tabs.update(tabId, { active: true }).then(tab => {
@@ -88,6 +92,38 @@ function tabOpen(e) {
   }
 }
 
+function makeHtmlTable(head, body) {
+  return [
+    '<thead>', [
+      '<tr>', [
+        head.map((column, i) =>
+          `<th style="width:${column[1]}px">${column[0]}`)],
+      '</tr>'],
+    '</thead>', '<tbody>', [
+      body.map((win, i) => [
+        win.map(x => x.reverse()).map(tab => [
+          `<tr class="win tab ${win.winId === Infinity ? 'closed' : 'open'}" title="${tab[0].title}\n${tab[0].url}\n(id: histId)">`, [
+            `<td style="max-width:${head[0][1]}px">${win.winId === Infinity ? "[closed]" : i}</td>`,
+            `<td style="max-width:${head[1][1]}px"><details><summary>${escapeHtml(tab[0].title)}</summary>`, [
+              '<ul>', [
+                tab.slice(1)
+                  .map(histEntry => `<li>${escapeHtml(histEntry.title)}</li>`)],
+              '</ul>'],
+              '</details></td>',
+            `<td style="max-width:${head[2][1]}px">${tab[0].url}</td>`,
+            `<td style="max-width:${head[3][1]}px">${prettyDate(tab[0].lastAccessed)}</td>`,
+          ], '</tr>',
+        ]),
+      ])],
+    '<tbody>',
+  ].flat(Infinity).join('')
+}
+function escapeHtml(text) {
+  return text.replace(/["&<>]/g, a => (
+    { '"': '&quot;', '&': '&amp;', '<': '&lt;', '>': '&gt;' }[a]
+  ))
+}
+
 // FIXME: Handle re-opening of tabs (Ctrl-Shift-T) gracefully
 // (Old entry should be renamed to match the re-opened tab.)
 
@@ -97,41 +133,34 @@ function tabOpen(e) {
 // Listen for clicks on the buttons, and send the appropriate message to the
 // content script in the page.
 (function popupOpened() {
-  $.on('#out',   'click', tabOpen)
-  const e = $('#out')
+  const $menu = $('#menu')
+  $.on($menu, 'click', tabOpen)
   browser.storage.local.get().then((x) => {
 
-    const hists = Object.keys(x)       // find key/values with tab history
-      .filter(id => id.match(/^(\d+|[a-zA-z0-9_-]{22})$/))
-      .map(id => {
-        x[id][0].histId = id
-        return x[id]
-      })
+    // Object with all the tabs.
+    // { winId: [[tab, tabId:xx, index:xx], winId, ... }
+    const xxx = Object.entries(x)
+      .filter(([k]) => /^(\d+|[a-zA-z0-9_-]{22})$/.test(k))
+      .reduce((a, [k, v], i) => {
+        const meta = v.shift()
+        const winId = meta.windowId ?? Infinity
+        const tabId = meta.tabId, index = meta.index
+        a[winId]  ??= Object.assign([], { winId })
+        a[winId].push(Object.assign(v,  { tabId, index }))
+      return a
+    }, {})
 
-    const histByWindow = Object.values( // split history one per window
-      hists.reduce((a, x) => {
-        const id = `winId:${x[0].windowId}`
-        a[id] ??= []
-        a[id].push(x)
-        return a
-      }, {})
-    ).sort(([[{ windowId: a }]], [[{ windowId: b }]]) => (a > b) - (a < b)) // sort: tab order
+    let tableHead = [['Win',65], ['Tab',350], ['URL',242], ['Time', 130]]
+    let tableBody = Object.values(xxx)
+      .sort((a, b) => a.winId - b.winId)     // sort windows
+      .map(win =>                            // sort tabs
+        win.winId === undefined
+          ? win.sort((a, b) =>
+            (a[a.length - 1] ?? '').localeCompare((b[b.length - 1] ?? '')))
+          : win.sort((a, b) => a.index - b.index))
 
-    for (const win of histByWindow) {
-      const winId = win[0][0].windowId
-      $.append(
-        e.appendChild($(`<div class="win ${winId !== undefined ? 'open' : 'closed'}">`)),
-        ...win
-          .sort(([{ index: a }], [{ index: b }]) => (a > b) - (a < b)) // sort: tab order
-          .map(hist => {
-            const { tabId, histId } = hist[0]             // common
-            const { url, title } = hist[hist.length - 1]  // last entry
-            return `<div class=tab data-tab-id="${tabId}" ` +
-              `data-hist-id="${histId}" title="${url}\n(id: ${histId})">${title}`
-          })
-      )
-    }
-
+    console.log($menu.innerHTML = makeHtmlTable(tableHead, tableBody))
+    console.log(document.body.offsetWidth)
   })
 
 })()
