@@ -192,8 +192,7 @@ function getCellValue($tr, column) {
             (a[a.length - 1] ?? '').localeCompare((b[b.length - 1] ?? '')))
           : win.sort((a, b) => a.index - b.index))
 
-    console.log($menu.innerHTML = makeHtmlTable(tableHead, tableBody))
-    console.log(document.body.offsetWidth)
+    $menu.innerHTML = makeHtmlTable(tableHead, tableBody)
 
     // Set up events for sorting.
     $.on($menu.querySelector('thead'), 'click', tableResortHandler)
