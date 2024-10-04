@@ -1,17 +1,5 @@
 //-*- js-indent-level: 2 -*-
 
-// Mini logger. -- Logs stuff to `browser.storage.local` as an array (with the
-// key '_'). If log is empty
-// - log()         -- Append to log.
-// - log.get(func) -- Invoke `func()` with the log as args.
-// - log.clear()   -- Clear the log.
-const log = (s => {
-  const log = (...x) => s.get({ _: [] }).then(o => s.set({ _: o._.concat(x) }))
-  log.get   = (f)    => s.get({ _: [] }).then(o => f(o._.join('\n')))
-  log.clear = ()     => s.remove('_')
-  return log
-})(browser.storage.local)
-
 // Elementary. Mini jQuery replacement replacement.
 const $ = (() => {
   // $(selector|html) Return first element matching SELECTOR or first created
@@ -29,10 +17,6 @@ const $ = (() => {
 })()
 
 /******************************************************************************/
-
-function logShow() {
-  log.get(l => $('textarea').value = l)
-}
 
 // Goto specified tab (focus window if necessary).
 function tabSwitch(tabId) {
@@ -113,9 +97,7 @@ function tabOpen(e) {
 // Listen for clicks on the buttons, and send the appropriate message to the
 // content script in the page.
 (function popupOpened() {
-  $.on('#clear', 'click', log.clear)
   $.on('#out',   'click', tabOpen)
-  $.on(browser.storage, 'changed', logShow)
   const e = $('#out')
   browser.storage.local.get().then((x) => {
 

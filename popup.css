@@ -20,10 +20,6 @@ html, body {
 .button:hover {
   background: #ccc;
 }
-textarea {
-  width: 100%;
-  height: 10rem;
-}
 #out {
   width: 100%;
 }

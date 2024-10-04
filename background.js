@@ -1,17 +1,5 @@
 //-*- js-indent-level: 2 -*-
 
-// Mini logger. -- Logs stuff to `browser.storage.local` as an array (with the
-// key '_'). If log is empty
-// - log()         -- Append to log.
-// - log.get(func) -- Invoke `func()` with the log as args.
-// - log.clear()   -- Clear the log.
-const log = (s => {
-  const log = (...x) => s.get({ _: [] }).then(o => s.set({ _: o._.concat(x) }))
-  log.get   = (f)    => s.get({ _: [] }).then(o => f(o._.join('\n')))
-  log.clear = ()     => s.remove('_')
-  return log
-})(browser.storage.local)
-
 // Elementary. Mini jQuery replacement replacement.
 const $ = (() => {
   // $(selector|html) Return first element matching SELECTOR or first created
@@ -55,7 +43,6 @@ const random132BitString = (crypto => () => {
 // * browser.storage.local.get(x => { delete x._; console.log(JSON.stringify(x,0,1)) })
 // * browser.storage.local.clear()
 function tabChanged(tabId, changeInfo, tab) {
-  //log(`BACKGROUND tabChanged(${tabId})`)
   if (tab.url && tab.title) {
     // FIXME: Currently using tabId as histId here, but should be smarter in
     // the end (because tabIds are reused by browser, and we don't want
@@ -75,7 +62,6 @@ function histPush(histId, state, globs = {}) {
   // cash stuff to be written in an object, and use setTimeout() to write it
   // only when browser goes idle?
 
-  // log(`BACKGROUND histPush(${histId}) -- ${JSON.stringify(state)}`)
   browser.storage.local.get({ [histId]: [globs] }).then(data => {
     const hist = data[histId]
     const last = hist[hist.length - 1]
@@ -90,8 +76,6 @@ function histPush(histId, state, globs = {}) {
 
 // Archive tab.
 function tabClosed(tabId, removeInfo) {
-  //log('BACKGROUND tabClosed()')
-
   histId = `${tabId}`
   browser.storage.local.get(histId).then(({ [histId]: o }) => {
     o[0].tabId = undefined
