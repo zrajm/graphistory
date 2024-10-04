@@ -1,6 +1,10 @@
 //-*- js-indent-level: 2 -*-
 
-// Mini logger.
+// Mini logger. -- Logs stuff to `browser.storage.local` as an array (with the
+// key '_'). If log is empty
+// - log()         -- Append to log.
+// - log.get(func) -- Invoke `func()` with the log as args.
+// - log.clear()   -- Clear the log.
 const log = (s => {
   const log = (...x) => s.get({ _: [] }).then(o => s.set({ _: o._.concat(x) }))
   log.get   = (f)    => s.get({ _: [] }).then(o => f(o._.join('\n')))
@@ -99,10 +103,9 @@ function tabClosed(tabId, removeInfo) {
   })
 }
 
-/*******************************************************************************
- ** MAIN
- */
-(function backgroundStarted() {
+/*===========================================================================*/
+/* Main */
+(() => {
   $.on(browser.tabs, 'removed', tabClosed)
   $.on(browser.tabs, 'updated', tabChanged, { properties: ['status'] }) //, 'url', 'title'] })
 })()

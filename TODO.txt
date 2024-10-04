@@ -4,6 +4,13 @@ archive = tag metadata as 'no longer open tab'
 unarchive = restore a tab (and set metadata to 'open tab' state)
 
 * ESSENTIAL
+** TODO Remember table structure for next invocation
+** TODO Syncronize to server
+** TODO Table sortable
+** TODO Table resizable columns
+** TODO Table hide/show columns
+** TODO Table drag headers to move around
+** TODO Hilite current tab
 ** TODO Unarchive tab
 ** TODO Handle when tab is restored by browser
    When a recently closed tab is restored by the browser (for example because
@@ -30,6 +37,7 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
      `
    })
 ** TODO Increase browser.storage quota
+** TODO Other visualization of history?
 * NON-ESSENTIAL
 ** TODO Handle tab groups
    One should be able to name tab groups, and give them a color. In the GUI
@@ -39,6 +47,40 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    corresponding way in the browser. When dragging a tab from archive into an
    existing window, it should be unarchived and instantiated in that window
    (when just clicking, it should be instantiated in the current window).
+* DOCS
+** Load/restart a Firefox plugin during development
+   Go to `about:debugging`
+
+   Here `Load Temporary Add-on...` can be used to load a plugin in development.
+   (Select the `manifest.json` file.)
+
+   Click the `Inspect` button to inspect the background process's DOM, source
+   etc. (That's so weird, why does the *background process* have a DOM?)
+
+   -------------------------------------------------------------------------
+   I don't think logging for addons need to be enabled beyond that, but I'll
+   keep the following here for now, just in case.
+
+   To enable addon logging, do:
+
+   + In `about:config`, add a new option `extensions.sdk.console.logLevel` and
+     give it the value "all"
+
+   + Restart Firefox
+
+       in Firefox open the Browser Console:
+
+   + `Tools > Web developer > Browser console` (NOTE: This is not the same as
+     the usual Web Console used to debug web pages)
+
+   You should see addons logs there now.
+
+   Shortcut for browser console is Ctrl+Shift+J
+
+   At the top of the 'Browser Console' window I had to change 'Browser Console
+   Mode' from 'Parent process only' to 'Multiprocess'. There is no longer a
+   "Show Content Messages" option. Not sure if this applies to all plugins -
+   this was for a Sidebar plugin.
 * FINISHED
 ** DONE Cryptographically strong randomness in IDs
    CLOSED: [2022-01-27 Thu 17:33]
