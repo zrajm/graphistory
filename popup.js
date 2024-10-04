@@ -124,6 +124,39 @@ function escapeHtml(text) {
   ))
 }
 
+// Table sorter adapted from: https://stackoverflow.com/a/49041392/351162
+function tableResortHandler(evt) {
+  const $th    = evt.target.closest('th')
+  const $body  = $th.closest('table').querySelector('tbody')
+  const column = Array.from($th.parentNode.children).indexOf($th)
+  const $rows  = Array.from($body.querySelectorAll('tr'))
+    .sort(comparer(column, this.asc = !this.asc))
+  if (this.asc) {
+    $th.classList.add('ascending')
+    $th.classList.remove('descending')
+  } else {
+    $th.classList.add('descending')
+    $th.classList.remove('ascending')
+  }
+  $rows.forEach($tr => $body.appendChild($tr)) // moves each <tr>
+}
+// Return function for sorting specific column.
+function comparer(column, asc) {  // column number + ascending order
+  return (a, b) => {
+    // This function is called immediately, is used to pass in args in
+    // different order based on ascending/descending order.
+    return ((v1, v2) => {
+      // Sort based on a numeric or localeCompare.
+      return (v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2))
+        ? v1 - v2
+        : v1.toString().localeCompare(v2)
+    })(getCellValue(asc ? a : b, column), getCellValue(asc ? b : a, column))
+  }
+}
+function getCellValue($tr, column) {
+  return $tr.children[column].innerText || $tr.children[column].textContent
+}
+
 // FIXME: Handle re-opening of tabs (Ctrl-Shift-T) gracefully
 // (Old entry should be renamed to match the re-opened tab.)
 
@@ -161,6 +194,9 @@ function escapeHtml(text) {
 
     console.log($menu.innerHTML = makeHtmlTable(tableHead, tableBody))
     console.log(document.body.offsetWidth)
+
+    // Set up events for sorting.
+    $.on($menu.querySelector('thead'), 'click', tableResortHandler)
   })
 
 })()

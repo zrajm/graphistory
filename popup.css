@@ -40,4 +40,7 @@ th {
   position: relative;
   cursor: pointer;
 }
+th:after { opacity: .25 }
+th.ascending:after { content: " \25BE" }
+th.descending:after { content: " \25B4" }
 /*[eof]*/
