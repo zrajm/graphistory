@@ -99,7 +99,8 @@ function makeHtmlTable(head, body) {
         head.map((column, i) =>
           `<th style="width:${column[1]}px">${column[0]}`)],
       '</tr>'],
-    '</thead>', '<tbody>', [
+    '</thead>',
+    '<tbody>', [
       body.map((win, i) => [
         win.map(x => x.reverse()).map(tab => [
           `<tr class="win tab ${win.winId === Infinity ? 'closed' : 'open'}" title="${tab[0].title}\n${tab[0].url}\n(id: histId)">`, [
@@ -115,7 +116,7 @@ function makeHtmlTable(head, body) {
           ], '</tr>',
         ]),
       ])],
-    '<tbody>',
+    '</tbody>',
   ].flat(Infinity).join('')
 }
 function escapeHtml(text) {
