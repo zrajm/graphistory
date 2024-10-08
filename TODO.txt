@@ -4,9 +4,6 @@ archive = tag metadata as 'no longer open tab'
 unarchive = restore a tab (and set metadata to 'open tab' state)
 
 * ESSENTIAL
-** TODO Share the 'Elementary' instance between background & popup
-   So it doesn't have to be reloaded every time the popup is opened. (Or so
-   that it can be reloaded faster?)
 ** TODO Save window (and its name) with each tab
    Tabs should be restoreable singly or a whole window at time.
 ** TODO Remember table structure for next invocation
@@ -87,6 +84,10 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    "Show Content Messages" option. Not sure if this applies to all plugins -
    this was for a Sidebar plugin.
 * FINISHED
+** DONE Share the 'Elementary' instance between background & popup
+   CLOSED: [2024-10-09 Wed 00:51]
+   So it doesn't have to be reloaded every time the popup is opened. (Or so
+   that it can be reloaded faster?)
 ** DONE Table sortable
    CLOSED: [2024-10-04 Fri 18:51]
 ** DONE Cryptographically strong randomness in IDs
