@@ -1,20 +1,58 @@
 //-*- js-indent-level: 2 -*-
 
 // Elementary. Mini jQuery replacement replacement.
-const $ = (() => {
-  // $(selector|html) Return first element matching SELECTOR or first created
-  // element in HTML. With non-text arg, return arg as-is.
-  const elementary = x => typeof x !== 'string' ? x : x[0] === '<'
-    ? new DOMParser().parseFromString(x, 'text/html').body.firstChild // HTML
-    : document.querySelector(x) // CSS selector
-  // $.on(selector, event, func, xtra...) Return undefined.
-  const on = (s, e, f, ...x) => s === browser.tabs || s === browser.storage
-    ? s[`on${e[0].toUpperCase()}${e.slice(1)}`].addListener(f, ...x)
-    : $(s).addEventListener(e, f, ...x)
-  // $.append((text|html|node)...)
-  const append = (s, ...a) => $(s).append(...a.map(x => x[0] === '<' ? $(x) : x))
-  return Object.assign(elementary, { append, on })
-})()
+const $ = x => new Elementary(x)
+class Elementary extends Array {
+  #wordsplit(x) { return x.trim().split(/\s+/) }
+  // Invoked with `$(CSS-selector|html|element|onloadCallback)`.
+  // Return array of DOM Elements, with some added methods (similar to jQuery).
+  constructor(x) {
+    super()
+    if (typeof x === 'function') { addEventListener('load', x); return }
+    Object.assign(
+      this, typeof x === 'string'
+        ? (x[0] === '<'
+           ? new DOMParser().parseFromString(x, 'text/html').body.children // HTML
+           : document.querySelectorAll(x))   // CSS selector
+        : x.length === undefined ? [x] : x)
+  }
+  /* traversal */
+  forEach(...a) { super.forEach(...a); return this }
+  parent() { return this.map(t => t.parentElement) } /* not uniqued! (jQuery does) */
+  children() { return this.flatMap(t => [...t.children]) }
+  /* query-esque */
+  closest(x) { return this.map(t => t.closest(x)) } /* not uniqued! (jQuery does) */
+  find(x) { return this.flatMap(t => [...t.querySelectorAll(x)]) }
+  /* events */
+  on(e, ...a) {
+    e = this.#wordsplit(e)
+    return this.forEach($e => e.forEach(e => {
+      if (typeof browser !== 'undefined' &&  // for Firefox plugins
+          ($e === browser.tabs || $e === browser.storage)) {
+        return $e[`on${e[0].toUpperCase()}${e.slice(1)}`].addListener(...a)
+        }
+      return $e.addEventListener(e, ...a)
+    }))
+  }
+  off(e, ...a) {
+    e = this.#wordsplit(e)
+    return this.forEach($e => e.forEach(e => $e.removeEventListener(e, ...a)))
+  }
+  /* modification of DOM */
+  append(...a) {
+    a = a.map(x => /^</.test(x) ? $(x) : x)
+      .flatMap(x => x instanceof Elementary ? x : [x])
+    return this.forEach(t => t.append(...a))
+  }
+  addClass   (x) { return this.forEach(t => t.classList.add   (x)) }
+  removeClass(x) { return this.forEach(t => t.classList.remove(x)) }
+  css(css = {}) {
+    css = Object.entries(css)
+    return this.forEach(t => css.forEach(([k, v]) =>
+      t.style[k] = `${v}${typeof v === 'number' ? 'px' : ''}`
+    ))
+  }
+}
 
 /******************************************************************************/
 
@@ -42,7 +80,7 @@ function tabCreateWithHistory(urllist) {
   function historyLoad() {
   }
   browser.tabs.create({ url: urllist.shift() })
-    .then(() => $.on(browser.tabs, 'updated', historyLoadItem))
+    .then(() => $(browser.tabs).on('updated', historyLoadItem))
 }
 
 function tabOpen(e) {
@@ -127,19 +165,18 @@ function escapeHtml(text) {
 
 // Table sorter adapted from: https://stackoverflow.com/a/49041392/351162
 function tableResortHandler(evt) {
-  const $th    = evt.target.closest('th')
-  const $body  = $th.closest('table').querySelector('tbody')
-  const column = Array.from($th.parentNode.children).indexOf($th)
-  const $rows  = Array.from($body.querySelectorAll('tr'))
-    .sort(comparer(column, this.asc = !this.asc))
+  const $th    = $(evt.target.closest('th'))
+  const $body  = $th.closest('table').find('tbody')
+  const column = $th.parent().children().indexOf($th[0])
+  const $rows  = $body.find('tr').sort(comparer(column, this.asc = !this.asc))
   if (this.asc) {
-    $th.classList.add('ascending')
-    $th.classList.remove('descending')
+    $th.addClass('ascending')
+    $th.removeClass('descending')
   } else {
-    $th.classList.add('descending')
-    $th.classList.remove('ascending')
+    $th.addClass('descending')
+    $th.removeClass('ascending')
   }
-  $rows.forEach($tr => $body.appendChild($tr)) // moves each <tr>
+  $rows.forEach(tr => $body.append(tr)) // moves each <tr>
 }
 // Return function for sorting specific column.
 function comparer(column, asc) {  // column number + ascending order
@@ -154,8 +191,8 @@ function comparer(column, asc) {  // column number + ascending order
     })(getCellValue(asc ? a : b, column), getCellValue(asc ? b : a, column))
   }
 }
-function getCellValue($tr, column) {
-  return $tr.children[column].innerText || $tr.children[column].textContent
+function getCellValue(tr, column) {
+  return tr.children[column].innerText || tr.children[column].textContent
 }
 
 // FIXME: Handle re-opening of tabs (Ctrl-Shift-T) gracefully
@@ -168,7 +205,7 @@ function getCellValue($tr, column) {
 // content script in the page.
 (function popupOpened() {
   const $menu = $('#menu')
-  $.on($menu, 'click', tabOpen)
+  $menu.on('click', tabOpen)
   browser.storage.local.get().then((x) => {
 
     // Object with all the tabs.
@@ -193,10 +230,10 @@ function getCellValue($tr, column) {
             (a[a.length - 1] ?? '').localeCompare((b[b.length - 1] ?? '')))
           : win.sort((a, b) => a.index - b.index))
 
-    $menu.innerHTML = makeHtmlTable(tableHead, tableBody)
+    $menu[0].innerHTML = makeHtmlTable(tableHead, tableBody)
 
     // Set up events for sorting.
-    $.on($menu.querySelector('thead'), 'click', tableResortHandler)
+    $menu.find('thead').on('click', tableResortHandler)
   })
 
 })()
