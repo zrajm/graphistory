@@ -4,9 +4,13 @@ archive = tag metadata as 'no longer open tab'
 unarchive = restore a tab (and set metadata to 'open tab' state)
 
 * ESSENTIAL
+** TODO Share the 'Elementary' instance between background & popup
+   So it doesn't have to be reloaded every time the popup is opened. (Or so
+   that it can be reloaded faster?)
+** TODO Save window (and its name) with each tab
+   Tabs should be restoreable singly or a whole window at time.
 ** TODO Remember table structure for next invocation
 ** TODO Syncronize to server
-** TODO Table sortable
 ** TODO Table resizable columns
 ** TODO Table hide/show columns
 ** TODO Table drag headers to move around
@@ -39,6 +43,7 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
 ** TODO Increase browser.storage quota
 ** TODO Other visualization of history?
 * NON-ESSENTIAL
+** TODO Favicons
 ** TODO Handle tab groups
    One should be able to name tab groups, and give them a color. In the GUI
    each tab should have the corresponding color.
@@ -82,6 +87,8 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    "Show Content Messages" option. Not sure if this applies to all plugins -
    this was for a Sidebar plugin.
 * FINISHED
+** DONE Table sortable
+   CLOSED: [2024-10-04 Fri 18:51]
 ** DONE Cryptographically strong randomness in IDs
    CLOSED: [2022-01-27 Thu 17:33]
    Session IDs, note IDs etc. should all use cryptographic strength randomness

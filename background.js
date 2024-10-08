@@ -76,8 +76,9 @@ function histPush(histId, state, globs = {}) {
 
 // Archive tab.
 function tabClosed(tabId, removeInfo) {
-  histId = `${tabId}`
+  const histId = `${tabId}`
   browser.storage.local.get(histId).then(({ [histId]: o }) => {
+    if (o === undefined) { return }
     o[0].tabId = undefined
     o[0].windowId = undefined
     o[0].index = undefined
