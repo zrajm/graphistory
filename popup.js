@@ -39,6 +39,7 @@ class Elementary extends Array {
     return this.forEach($e => e.forEach(e => $e.removeEventListener(e, ...a)))
   }
   /* modification of DOM */
+  html(a) { return this.forEach(t => t.innerHTML = a) }
   append(...a) {
     a = a.map(x => /^</.test(x) ? $(x) : x)
       .flatMap(x => x instanceof Elementary ? x : [x])
@@ -169,6 +170,7 @@ function tableResortHandler(evt) {
   const $body  = $th.closest('table').find('tbody')
   const column = $th.parent().children().indexOf($th[0])
   const $rows  = $body.find('tr').sort(comparer(column, this.asc = !this.asc))
+  $body.append($rows)                          // move each <tr>
   if (this.asc) {
     $th.addClass('ascending')
     $th.removeClass('descending')
@@ -176,7 +178,6 @@ function tableResortHandler(evt) {
     $th.addClass('descending')
     $th.removeClass('ascending')
   }
-  $rows.forEach(tr => $body.append(tr)) // moves each <tr>
 }
 // Return function for sorting specific column.
 function comparer(column, asc) {  // column number + ascending order
@@ -230,7 +231,7 @@ function getCellValue(tr, column) {
             (a[a.length - 1] ?? '').localeCompare((b[b.length - 1] ?? '')))
           : win.sort((a, b) => a.index - b.index))
 
-    $menu[0].innerHTML = makeHtmlTable(tableHead, tableBody)
+    $menu.html(makeHtmlTable(tableHead, tableBody))
 
     // Set up events for sorting.
     $menu.find('thead').on('click', tableResortHandler)

@@ -39,6 +39,7 @@ class Elementary extends Array {
     return this.forEach($e => e.forEach(e => $e.removeEventListener(e, ...a)))
   }
   /* modification of DOM */
+  html(a) { return this.forEach(t => t.innerHTML = a) }
   append(...a) {
     a = a.map(x => /^</.test(x) ? $(x) : x)
       .flatMap(x => x instanceof Elementary ? x : [x])
