@@ -195,6 +195,24 @@ function getCellValue(tr, column) {
   return tr.children[column].innerText || tr.children[column].textContent
 }
 
+function exportData() {
+  browser.storage.local.get().then(data => {
+    // Adapted from: https://stackoverflow.com/a/65939108/351162
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'text/json' })
+    const link = document.createElement('a')
+    link.download = 'graphistory-'    // download filename
+      + (new Date()).toISOString()
+      .replace(/[.].*$/, '')
+      .replace(/[A-Z:]/g, x => ({':': '.'}[x] || '_' ))
+      + '.json'
+    link.href = URL.createObjectURL(blob)
+    link.dataset.downloadurl = ['text/json', link.download, link.href].join(':')
+    link.click()
+    link.remove()
+    link.href.revokeObjectURL()
+  })
+}
+
 // FIXME: Handle re-opening of tabs (Ctrl-Shift-T) gracefully
 // (Old entry should be renamed to match the re-opened tab.)
 
@@ -206,6 +224,7 @@ function getCellValue(tr, column) {
 (function popupOpened() {
   const $menu = $('#menu')
   $menu.on('click', tabOpen)
+  $('#export').on('click', exportData)
   browser.storage.local.get().then((x) => {
 
     // Object with all the tabs.

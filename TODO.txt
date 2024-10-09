@@ -87,6 +87,8 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    "Show Content Messages" option. Not sure if this applies to all plugins -
    this was for a Sidebar plugin.
 * FINISHED
+** DONE Export (download) saved state
+   CLOSED: [2024-10-09 Wed 19:26]
 ** DONE Table resizable columns
    CLOSED: [2024-10-09 Wed 12:29]
 ** DONE Share the 'Elementary' instance between background & popup
