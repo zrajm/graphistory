@@ -89,7 +89,7 @@ function makeHtmlTable(head, body) {
     '<tbody>', [
       body.map((win, i) => [
         win.map(x => x.reverse()).map(tab => [
-          `<tr class="win tab ${win.winId === Infinity ? 'closed' : 'open'}" title="${tab[0].title}\n${tab[0].url}\n(id: histId)">`, [
+          `<tr class="${win.winId === Infinity ? 'closed' : 'open'}" title="${escapeHtml(tab[0].title)}\n${escapeHtml(tab[0].url)}\n(id: histId)">`, [
             `<td>${win.winId === Infinity ? "[closed]" : i}</td>`,
             `<td><details><summary>${escapeHtml(tab[0].title)}</summary>`, [
               '<ul>', [
@@ -97,7 +97,7 @@ function makeHtmlTable(head, body) {
                   .map(histEntry => `<li>${escapeHtml(histEntry.title)}</li>`)],
               '</ul>'],
               '</details></td>',
-            `<td>${tab[0].url}</td>`,
+            `<td>${escapeHtml(tab[0].url)}</td>`,
             `<td>${prettyDate(tab[0].lastAccessed)}</td>`,
           ], '</tr>',
         ]),
