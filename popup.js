@@ -163,6 +163,16 @@ function makeTableResizable(table) {
   })
 }
 
+// FIXME: Optimize, don't traverse HTML for each iteration
+function tableFilterHandler(evt) {
+  const regex = new RegExp(evt.target.value, 'i')
+  const tbody = $('#menu tbody')[0]
+  Array.prototype.forEach.call(tbody.children, tr => {
+    tr.hidden = !Array.prototype.some
+      .call(tr.children, x => regex.test(x.innerText))
+  })
+}
+
 // Table sorter adapted from: https://stackoverflow.com/a/49041392/351162
 function tableResortHandler(evt) {
   const $th    = $(evt.target.closest('th'))
@@ -254,8 +264,8 @@ function exportData() {
 
     // Set up events for sorting.
     $menu.find('thead').on('click', tableResortHandler)
+    $('input[type=search]').on('input', tableFilterHandler)
   })
-
 })()
 
 //[eof]
