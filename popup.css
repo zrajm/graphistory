@@ -4,7 +4,7 @@ html, body {
   font-family: sans;
   padding: 0;
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 * {
   box-sizing: border-box;
@@ -22,25 +22,38 @@ input {
 table {
   border-collapse: collapse;
   table-layout: fixed; width: 100%;
-  overflow: auto; display: block; /* needed for scrollbars */
-  height: 500px;
 }
-summary { cursor: pointer; }
-ul { margin: 0; }
-tr.closed td { background: #ddd; }
-td, th {
+th, td {
   border: 1px solid #0004;
+  /* FIXME: Total width of table will glitch during column resize unless all
+   * padding and border are set to 'px' (or are evenly divisible by px?), in
+   * the CSS!! Or if the table width isn't set in the CSS. Also setting
+   * 'overflow: hidden' on the body element seems to make a difference. */
   padding: 4px;
-  overflow: hidden;
   white-space: nowrap;
-  background: #fff;
+  min-width: 1em;
 }
 th {
   text-align: left;
   position: relative;
+  background: #fff;
   cursor: pointer;
 }
+td { overflow: hidden }
+summary { cursor: pointer; }
+ul { margin: 0; }
+tr.closed td { background: #ddd; }
 th:after { opacity: .25 }
 th.ascending:after { content: " \25BE" }
 th.descending:after { content: " \25B4" }
+.resizer {
+  position: absolute;
+  top: -1px; right: -4px; width: 7px; /*height: 99999px;*/
+  z-index: 1;
+  user-select: none;
+}
+html.resizing, .resizer:hover { cursor: col-resize; }
+html:not(.resizing) .resizer:hover, .resizer.resizing {
+  background: #00f4;
+}
 /*[eof]*/

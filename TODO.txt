@@ -4,11 +4,13 @@ archive = tag metadata as 'no longer open tab'
 unarchive = restore a tab (and set metadata to 'open tab' state)
 
 * ESSENTIAL
+** TODO Cache the popup DOM tree
+   It takes a long time to open the plugin popup. Can the DOM be cached so
+   re-rendering doesn't take such a long time?
 ** TODO Save window (and its name) with each tab
    Tabs should be restoreable singly or a whole window at time.
 ** TODO Remember table structure for next invocation
 ** TODO Syncronize to server
-** TODO Table resizable columns
 ** TODO Table hide/show columns
 ** TODO Table drag headers to move around
 ** TODO Hilite current tab
@@ -39,6 +41,7 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    })
 ** TODO Increase browser.storage quota
 ** TODO Other visualization of history?
+** TODO BUG: Something iffy with column resize
 * NON-ESSENTIAL
 ** TODO Favicons
 ** TODO Handle tab groups
@@ -84,6 +87,8 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    "Show Content Messages" option. Not sure if this applies to all plugins -
    this was for a Sidebar plugin.
 * FINISHED
+** DONE Table resizable columns
+   CLOSED: [2024-10-09 Wed 12:29]
 ** DONE Share the 'Elementary' instance between background & popup
    CLOSED: [2024-10-09 Wed 00:51]
    So it doesn't have to be reloaded every time the popup is opened. (Or so

@@ -90,15 +90,15 @@ function makeHtmlTable(head, body) {
       body.map((win, i) => [
         win.map(x => x.reverse()).map(tab => [
           `<tr class="win tab ${win.winId === Infinity ? 'closed' : 'open'}" title="${tab[0].title}\n${tab[0].url}\n(id: histId)">`, [
-            `<td style="max-width:${head[0][1]}px">${win.winId === Infinity ? "[closed]" : i}</td>`,
-            `<td style="max-width:${head[1][1]}px"><details><summary>${escapeHtml(tab[0].title)}</summary>`, [
+            `<td>${win.winId === Infinity ? "[closed]" : i}</td>`,
+            `<td><details><summary>${escapeHtml(tab[0].title)}</summary>`, [
               '<ul>', [
                 tab.slice(1)
                   .map(histEntry => `<li>${escapeHtml(histEntry.title)}</li>`)],
               '</ul>'],
               '</details></td>',
-            `<td style="max-width:${head[2][1]}px">${tab[0].url}</td>`,
-            `<td style="max-width:${head[3][1]}px">${prettyDate(tab[0].lastAccessed)}</td>`,
+            `<td>${tab[0].url}</td>`,
+            `<td>${prettyDate(tab[0].lastAccessed)}</td>`,
           ], '</tr>',
         ]),
       ])],
@@ -109,6 +109,58 @@ function escapeHtml(text) {
   return text.replace(/["&<>]/g, a => (
     { '"': '&quot;', '&': '&amp;', '<': '&lt;', '>': '&gt;' }[a]
   ))
+}
+
+/* FIXME: Make sure Elementary is used everywhere here */
+function makeTableResizable(table) {
+  /* FIXME: Total width of table will glitch during column resize unless all
+   * padding and border are set to 'px' (or are evenly divisible by px?), in
+   * the CSS!! Or if the table width isn't set in the CSS. Also setting
+   * 'overflow: hidden' on the body element seems to make a difference. */
+  function getMinWidth(t) {
+    const style = getComputedStyle(t)
+    return (style.boxSizing === 'content-box'
+      ? ['minWidth', 'paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth']
+      : ['minWidth']
+    ).reduce((a, p) => a + parseInt(style[p], 10), 0)
+  }
+  function makeColumnResizable($resizer, th1) {
+    const $d = $(document), $root = $('html'), th2 = th1.nextSibling
+    let x, min, max, w1, w2
+    function mouseDown(e) {
+      x = e.clientX
+      ;[w1, w2] = [th1, th2].map(t => parseInt(getComputedStyle(t).width, 10))
+      min = -(th1.offsetWidth - getMinWidth(th1))
+      max =   th2.offsetWidth - getMinWidth(th2)
+      // const width = th1.offsetWidth
+      // $(th1).append(
+      //   `<div style="position:absolute;top:0;left:${width + min-1}px;width:1px;height:100%;background:#000;z-index:100;height:${table.offsetHeight}px">`,
+      //   `<div style="position:absolute;top:0;left:${width + max-1}px;width:1px;height:100%;background:#000;z-index:100;height:${table.offsetHeight}px">`)
+      $d.on('mousemove', mouseMove)
+      $d.on('mouseup',   mouseUp)
+      $resizer.addClass('resizing')
+      $root.addClass('resizing')
+    }
+    function mouseMove(e) {
+      let dx = Math.min(max, Math.max(min, e.clientX - x))
+      th1.style.width = `${w1 + dx}px`
+      th2.style.width = `${w2 - dx}px`
+    }
+    function mouseUp(e) {
+      $resizer.removeClass('resizing')
+      $root.removeClass('resizing')
+      $d.off('mousemove', mouseMove)
+      $d.off('mouseup', mouseUp)
+    }
+    $resizer.on('mousedown', mouseDown)
+    $resizer.on('click', e => e.stopPropagation())
+  }
+  $('th').slice(0, -1).forEach(th => {
+    const $resizer = $('<div class=resizer>')
+      .css({ height: table[0].offsetHeight })
+    $(th).append($resizer)
+    makeColumnResizable($resizer, th)
+  })
 }
 
 // Table sorter adapted from: https://stackoverflow.com/a/49041392/351162
@@ -179,6 +231,7 @@ function getCellValue(tr, column) {
           : win.sort((a, b) => a.index - b.index))
 
     $menu.html(makeHtmlTable(tableHead, tableBody))
+    makeTableResizable($menu)
 
     // Set up events for sorting.
     $menu.find('thead').on('click', tableResortHandler)
