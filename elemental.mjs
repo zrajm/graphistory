@@ -1,6 +1,6 @@
 //-*- mode: js; js-indent-level: 2 -*-
 
-// Elemental. Mini jQuery replacement replacement.
+// Elemental. Mini jQuery replacement.
 export const $ = x => new Elemental(x)
 export class Elemental extends Array {
   #wordsplit(x) { return x.trim().split(/\s+/) }
@@ -39,7 +39,7 @@ export class Elemental extends Array {
     return this.forEach($e => e.forEach(e => $e.removeEventListener(e, ...a)))
   }
   /* modification of DOM */
-  html(a) { return this.forEach(t => t.innerHTML = a) }
+  html(a) { return a ? this.forEach(t => t.innerHTML = a) : this[0].innerHTML }
   append(...a) {
     a = a.map(x => /^</.test(x) ? $(x) : x)
       .flatMap(x => x instanceof Elemental ? x : [x])
