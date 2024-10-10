@@ -31,6 +31,7 @@ th, td {
   padding: 4px;
   white-space: nowrap;
   min-width: 1em;
+  vertical-align: top;
 }
 th {
   text-align: left;
@@ -40,16 +41,32 @@ th {
 }
 tbody tr:hover {
   cursor: pointer;
-  text-decoration: underline;
+  /* Underline, except if hovering a <summary> element. */
+  &:not(:has(summary:hover)) { text-decoration: underline }
   background: #0002;
 }
 td { overflow: hidden }
-summary { cursor: pointer; }
 ul { margin: 0; }
 tr.closed td { background: #ddd; }
 th:after { opacity: .25 }
 th.ascending:after { content: " \25BE" }
 th.descending:after { content: " \25B4" }
+details {
+  & > summary:before  {
+    display: inline-block; /* disables underline */
+    padding: 0 4px;
+    margin: 0 2px 0 -2px;
+    border-radius: 4px;
+  }
+  &       > summary::marker { content: none }
+  &       > summary:before  { content: '▸' }
+  &[open] > summary:before  { content: '▾' }
+  &       > summary:hover:before { background: #0002; }
+
+  /* Disable click on <summary>, but allow on its little arrow. */
+  pointer-events: none;
+  & > summary:before { pointer-events: auto; }
+}
 .resizer {
   position: absolute;
   top: -1px; right: -4px; width: 7px; /*height: 99999px;*/

@@ -23,6 +23,7 @@ export class Elemental extends Array {
   /* query-esque */
   closest(x) { return this.map(t => t.closest(x)) } /* not uniqued! (jQuery does) */
   find(x) { return this.flatMap(t => [...t.querySelectorAll(x)]) }
+  is(a) { return this.some(t => t.matches(a)) }
   /* events */
   on(e, ...a) {
     e = this.#wordsplit(e)

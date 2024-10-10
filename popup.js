@@ -32,6 +32,7 @@ function tabCreateWithHistory(urllist) {
 }
 
 function tabOpen(evt) {
+  if ($(evt.target).is('summary')) { return }
   const el = evt.target.closest('tr')  // clicked element
   if (el) {
     const tabId = Number(el.dataset.tabId)

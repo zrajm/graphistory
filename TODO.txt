@@ -12,7 +12,6 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    Should be able to press... tab? arrow down? to enter the menu and navigate
    around, after selecting an entry, Enter should re-open, or go to that open
    tab.
-** TODO Allow showing of history in menu
 ** TODO Import (upload) a previously saved state
 ** TODO Show popup menu faster
    What can be done? Cache the DOM?
@@ -98,6 +97,23 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    "Show Content Messages" option. Not sure if this applies to all plugins -
    this was for a Sidebar plugin.
 * FINISHED
+** DONE Allow showing of history in menu
+   CLOSED: [2024-10-10 Thu 18:33]
+   Kinda annoying. In order to have the <details> expanded when on the little
+   '▸' arrow, but otherwise allow clicks to open a new tab (i.e. the click
+   should not register if clicking anywhere else in the <summary>, only if
+   clicking the little arrow), I had to do some CSS-fu.
+
+   I disabled the 'summary::marker' pseudo-element (which normally contains the
+   arrow) and replaced it with a 'summary:before' pseudo-element. This since I
+   needed to use CSS 'pointer-events' function, which is not supported by
+   '::marker' pseudo-events, but IS supported in ':before'. (Go figure!)
+
+   I then set 'pointer-events: none' on the <summary> element, but
+   'pointer-events: auto' on its :before element. This means that clicks on
+   <summary> are not registered, UNLESS they are on the little arrow.
+
+   Also added `is()` method to the Elemental module.
 ** DONE Rename module 'Elementary' -> 'Elemental'
    CLOSED: [2024-10-10 Thu 16:48]
 ** DONE Appearance of menu should show that links are clickable
