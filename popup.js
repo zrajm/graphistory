@@ -250,7 +250,7 @@ function exportData() {
       return a
     }, {})
 
-    let tableHead = [['Win',65], ['Tab',350], ['URL',242], ['Time', 130]]
+    let tableHead = [['Window',65], ['Tab',350], ['URL',242], ['Time', 130]]
     let tableBody = Object.values(xxx)
       .sort((a, b) => a.winId - b.winId)     // sort windows
       .map(win =>                            // sort tabs

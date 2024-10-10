@@ -14,7 +14,9 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    What can be done? Cache the DOM?
 ** TODO Save window (and its name) with each tab
    Tabs should be restoreable singly or a whole window at time.
-** TODO Remember table structure for next invocation
+** TODO Remember state of popup menu
+   When re-opening the menu (Alt+L) any adjustments made to the table, and the
+   previous search query should be kept.
 ** TODO Syncronize to server
 ** TODO Table hide/show columns
 ** TODO Table drag headers to move around
