@@ -16,7 +16,12 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
 ** TODO Show popup menu faster
    What can be done? Cache the DOM?
 ** TODO Save window (and its name) with each tab
-   Tabs should be restoreable singly or a whole window at time.
+   When closing a tab it should still be associated with the window it was in.
+   Restoring windows should only restore the tabs that was open at the time of
+   closing.
+
+   Restoring a closed tab should (if possible?) insert the tab in its original
+   place, in its original window.
 ** TODO Remember state of popup menu
    When re-opening the menu (Alt+L) any adjustments made to the table, and the
    previous search query should be kept.
