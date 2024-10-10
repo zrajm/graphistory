@@ -31,8 +31,8 @@ function tabCreateWithHistory(urllist) {
     .then(() => $(browser.tabs).on('updated', historyLoadItem))
 }
 
-function tabOpen(e) {
-  const el = event.target.closest('tr')  // clicked element
+function tabOpen(evt) {
+  const el = evt.target.closest('tr')  // clicked element
   if (el) {
     const tabId = Number(el.dataset.tabId)
     console.log('TABID:', typeof tabId, tabId)
