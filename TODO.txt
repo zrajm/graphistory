@@ -4,7 +4,12 @@ archive = tag metadata as 'no longer open tab'
 unarchive = restore a tab (and set metadata to 'open tab' state)
 
 * ESSENTIAL
-** TODO Make it possible to navigate popup menu withkeyboard
+** TODO Elementary -> Elemental
+** TODO Elementary -> Create separate repo
+** TODO Redesign the table to look more Firefox-esque
+   Use the more rounded font that Firefox uses to display its history (Ctrl+H),
+   use a slightly grayer color. Darken <tr> background on hover.
+** TODO Make it possible to navigate popup menu with keyboard
    Should be able to press... tab? arrow down? to enter the menu and navigate
    around, after selecting an entry, Enter should re-open, or go to that open
    tab.
@@ -94,6 +99,13 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    "Show Content Messages" option. Not sure if this applies to all plugins -
    this was for a Sidebar plugin.
 * FINISHED
+** DONE Appearance of menu should show that links are clickable
+   CLOSED: [2024-10-10 Thu 16:37]
+   'cursor: pointer' + underlined text on hover
+** DONE BUG: Fix clicking on tab in menu
+   CLOSED: [2024-10-10 Thu 16:37]
+   Stopped working. I inadvertently removed the 'tab' class used by tapOpen()
+   (in popup.js).
 ** DONE Keybinding for opening the menu (Alt+L)
    CLOSED: [2024-10-10 Thu 04:22]
    Ended up choosing the keyboard shortcut Alt+L (to parallel Ctrl+L for

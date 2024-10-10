@@ -38,6 +38,11 @@ th {
   background: #fff;
   cursor: pointer;
 }
+tbody tr:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  background: #0002;
+}
 td { overflow: hidden }
 summary { cursor: pointer; }
 ul { margin: 0; }
