@@ -4,7 +4,10 @@ archive = tag metadata as 'no longer open tab'
 unarchive = restore a tab (and set metadata to 'open tab' state)
 
 * ESSENTIAL
-** TODO Keybinding for opening the menu
+** TODO Make it possible to navigate popup menu withkeyboard
+   Should be able to press... tab? arrow down? to enter the menu and navigate
+   around, after selecting an entry, Enter should re-open, or go to that open
+   tab.
 ** TODO Allow showing of history in menu
 ** TODO Import (upload) a previously saved state
 ** TODO Show popup menu faster
@@ -89,6 +92,11 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    "Show Content Messages" option. Not sure if this applies to all plugins -
    this was for a Sidebar plugin.
 * FINISHED
+** DONE Keybinding for opening the menu (Alt+L)
+   CLOSED: [2024-10-10 Thu 04:22]
+   Ended up choosing the keyboard shortcut Alt+L (to parallel Ctrl+L for
+   selecting the address bar), after trying Ctrl+Shift+L and not getting it to
+   work.
 ** DONE Made tablist searchable
    CLOSED: [2024-10-09 Wed 23:48]
 ** DONE Export (download) saved state

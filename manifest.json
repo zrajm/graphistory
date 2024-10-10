@@ -20,12 +20,22 @@
         "dark": "icon-32.png",
         "size": 32
     }],
-    "default_title": "Graphistory",
+    "default_title": "Graphistory (Alt+L)",
     "default_popup": "popup.html"
   },
   "permissions": ["<all_urls>", "activeTab", "storage", "webNavigation"],
   "background": {
     "scripts": ["background.js"],
     "type": "module"
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+L"
+      },
+      "description": "Open Graphistory popup menu"
+    }
   }
 }
+
+
