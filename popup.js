@@ -211,7 +211,7 @@ function exportData() {
     // Adapted from: https://stackoverflow.com/a/65939108/351162
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'text/json' })
     const link = document.createElement('a')
-    link.download = 'graphistory-'    // download filename
+    link.download = 'tabcryo-'        // download filename
       + (new Date()).toISOString()
       .replace(/[.].*$/, '')
       .replace(/[A-Z:]/g, x => ({':': '.'}[x] || '_' ))

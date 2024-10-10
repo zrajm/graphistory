@@ -4,7 +4,7 @@ archive = tag metadata as 'no longer open tab'
 unarchive = restore a tab (and set metadata to 'open tab' state)
 
 * ESSENTIAL
-** TODO Elementary -> Create separate repo
+** TODO Move Elemental to separate repo
 ** TODO Redesign the table to look more Firefox-esque
    Use the more rounded font that Firefox uses to display its history (Ctrl+H),
    use a slightly grayer color. Darken <tr> background on hover.
@@ -97,6 +97,14 @@ unarchive = restore a tab (and set metadata to 'open tab' state)
    "Show Content Messages" option. Not sure if this applies to all plugins -
    this was for a Sidebar plugin.
 * FINISHED
+** DONE Better name for this plugin 'Graphistory' -> 'Tabcryo'
+   CLOSED: [2024-10-10 Thu 18:49]
+   Also means renaming the Github repo, and moving the webpage, so now we can
+   be found here:
+
+       Github:  https://github.com/zrajm/tabcryo
+       Webpage: https://zrajm.github.io/tabcryo/
+       -
 ** DONE Allow showing of history in menu
    CLOSED: [2024-10-10 Thu 18:33]
    Kinda annoying. In order to have the <details> expanded when on the little

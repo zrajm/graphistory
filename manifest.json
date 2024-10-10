@@ -1,9 +1,9 @@
 {
   "description": "EXPERIMENTAL: Save/restore tabs including page history.",
   "manifest_version": 2,
-  "name": "Graphistory",
+  "name": "Tabcryo",
   "version": "0.1",
-  "homepage_url": "https://zrajm.github.io/graphistory",
+  "homepage_url": "https://zrajm.github.io/tabcryo",
   "icons": {
     "8": "icon-8.png",
     "16": "icon-16.png",
@@ -20,7 +20,7 @@
         "dark": "icon-32.png",
         "size": 32
     }],
-    "default_title": "Graphistory (Alt+L)",
+    "default_title": "Tabcryo (Alt+L)",
     "default_popup": "popup.html"
   },
   "permissions": ["<all_urls>", "activeTab", "storage", "webNavigation"],
@@ -33,7 +33,7 @@
       "suggested_key": {
         "default": "Alt+L"
       },
-      "description": "Open Graphistory popup menu"
+      "description": "Open Tabcryo popup menu"
     }
   }
 }
