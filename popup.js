@@ -1,6 +1,6 @@
 //-*- js-indent-level: 2 -*-
 
-import { $ } from './elementary.mjs'
+import { $ } from './elemental.mjs'
 
 /******************************************************************************/
 
@@ -111,7 +111,7 @@ function escapeHtml(text) {
   ))
 }
 
-/* FIXME: Make sure Elementary is used everywhere here */
+/* FIXME: Make sure Elemental is used everywhere here */
 function makeTableResizable(table) {
   /* FIXME: Total width of table will glitch during column resize unless all
    * padding and border are set to 'px' (or are evenly divisible by px?), in

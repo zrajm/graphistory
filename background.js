@@ -1,6 +1,6 @@
 //-*- js-indent-level: 2 -*-
 
-import { $ } from './elementary.mjs'
+import { $ } from './elemental.mjs'
 
 // Return a Base64 encoded random string with 22 chars (132 bit). Uses stong
 // randomness everywhere possible. Uses RCF4648 version of Base64 encoding

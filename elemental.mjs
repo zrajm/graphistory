@@ -1,8 +1,8 @@
 //-*- mode: js; js-indent-level: 2 -*-
 
-// Elementary. Mini jQuery replacement replacement.
-export const $ = x => new Elementary(x)
-export class Elementary extends Array {
+// Elemental. Mini jQuery replacement replacement.
+export const $ = x => new Elemental(x)
+export class Elemental extends Array {
   #wordsplit(x) { return x.trim().split(/\s+/) }
   // Invoked with `$(CSS-selector|html|element|onloadCallback)`.
   // Return array of DOM Elements, with some added methods (similar to jQuery).
@@ -42,7 +42,7 @@ export class Elementary extends Array {
   html(a) { return this.forEach(t => t.innerHTML = a) }
   append(...a) {
     a = a.map(x => /^</.test(x) ? $(x) : x)
-      .flatMap(x => x instanceof Elementary ? x : [x])
+      .flatMap(x => x instanceof Elemental ? x : [x])
     return this.forEach(t => t.append(...a))
   }
   addClass   (x) { return this.forEach(t => t.classList.add   (x)) }
